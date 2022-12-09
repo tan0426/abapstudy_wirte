@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<abapGit version="v1.0.0" serializer="LCL_OBJECT_NROB" serializer_version="v1.0.0">
+ <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
+  <asx:values>
+   <ATTRIBUTES>
+    <OBJECT>ZT_SU_02_2</OBJECT>
+    <DOMLEN>ZDTEST_215_CODE</DOMLEN>
+    <PERCENTAGE>1.0</PERCENTAGE>
+    <NOIVBUFFER>00000010</NOIVBUFFER>
+   </ATTRIBUTES>
+   <TEXT>
+    <LANGU>E</LANGU>
+    <OBJECT>ZT_SU_02_2</OBJECT>
+    <TXT>ZT_SU_02_2</TXT>
+    <TXTSHORT>ZT_SU_02_2</TXTSHORT>
+   </TEXT>
+  </asx:values>
+ </asx:abap>
+</abapGit>

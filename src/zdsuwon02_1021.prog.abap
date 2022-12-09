@@ -1,0 +1,103 @@
+*&---------------------------------------------------------------------*
+*& Report ZDSUWON02_1021
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT ZDSUWON02_1021.
+
+DATA : GV_COL1(10),
+       GV_STRING TYPE STRING,
+       GV_1(10),
+       GV_2(10).
+
+GV_COL1 = 'WELCOME'.
+"FIND
+FIND 'C' IN GV_COL1.
+IF SY-SUBRC = 0.
+  WRITE : 'FIND'.
+ENDIF.
+
+"REPLACE
+REPLACE 'WEL' IN GV_COL1 WITH 'IN'.
+WRITE : / GV_COL1.
+
+"TRANSLATE
+TRANSLATE GV_COL1 TO LOWER CASE.
+WRITE : / GV_COL1.
+TRANSLATE GV_COL1 TO UPPER CASE.
+WRITE : / GV_COL1.
+
+"CONDENSE
+GV_COL1 = 'WEL   COME'.
+CONDENSE GV_COL1 NO-GAPS.
+WRITE : / GV_COL1.
+
+"CONCATENATE
+CONCATENATE GV_COL1 'WORLD' INTO GV_STRING.
+WRITE : / GV_STRING.
+
+CONCATENATE GV_COL1 'WORLD' INTO GV_STRING SEPARATED BY SPACE.
+WRITE : / GV_STRING.
+
+"SPLIT
+GV_STRING = 'WELCOMEQWORLD'.
+SPLIT GV_STRING AT 'Q' INTO GV_1 GV_2.
+WRITE : / GV_1, GV_2.
+
+"CN / CO / CA / NA
+"CN = CONTAINS NOT ONLY
+
+IF 'WEL' CN 'WELCOME'.
+  WRITE : / 'WEL'.
+ENDIF.
+IF 'QQ' CN 'WELCOME'.
+  WRITE : / 'QQ'.
+ENDIF.
+IF 'WA' CN 'WELCOME'.
+  WRITE : / 'WA'.
+ENDIF.
+IF 'WLE' CN 'WELCOME'.
+  WRITE : / 'WLE'.
+ENDIF.
+
+"CO = CONTAINS ONLY
+IF 'WEL' CO 'WELCOME'.
+  WRITE : / 'WEL'.
+ENDIF.
+IF 'QQ' CO 'WELCOME'.
+  WRITE : / 'QQ'.
+ENDIF.
+IF 'WA' CO 'WELCOME'.
+  WRITE : / 'WA'.
+ENDIF.
+IF 'WLE' CO 'WELCOME'.
+  WRITE : / 'WLE'.
+ENDIF.
+
+"CA = CONTAINS ANY
+IF 'WEL' CA 'WELCOME'.
+  WRITE : / 'WEL'.
+ENDIF.
+IF 'QQ' CA 'WELCOME'.
+  WRITE : / 'QQ'.
+ENDIF.
+IF 'WA' CA 'WELCOME'.
+  WRITE : / 'WA'.
+ENDIF.
+IF 'WLE' CA 'WELCOME'.
+  WRITE : / 'WLE'.
+ENDIF.
+
+"NA = CONTAINS NOT ANY
+IF 'WEL' NA 'WELCOME'.
+  WRITE : / 'WEL'.
+ENDIF.
+IF 'QQ' NA 'WELCOME'.
+  WRITE : / 'QQ'.
+ENDIF.
+IF 'WA' NA 'WELCOME'.
+  WRITE : / 'WA'.
+ENDIF.
+IF 'WLE' NA 'WELCOME'.
+  WRITE : / 'WLE'.
+ENDIF.

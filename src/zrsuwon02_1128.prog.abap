@@ -1,0 +1,100 @@
+*&---------------------------------------------------------------------*
+*& Report ZRSUWON02_1128
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT ZRSUWON02_1128.
+
+DATA : BEGIN OF GS_DATA,
+         ITEMPARENT_CD TYPE I,
+         ITEMCHILD_CD TYPE I,
+         BOM_SQ TYPE I,
+         JUST_QT TYPE I,
+         USE_YN TYPE I,
+         REMARK_DC TYPE C LENGTH 255,
+       END OF GS_DATA,
+       GT_DATA LIKE TABLE OF GS_DATA.
+
+DATA : LV_MSG TYPE STRING.
+DATA : LX_EXEC TYPE REF TO CX_ROOT.
+
+DATA : BEGIN OF GS_DATA2,
+        ONO TYPE I,
+        OPOS TYPE I,
+
+        PLANEDSTART(100),
+        PLANEDEND(100),
+        START(100),
+        END(100),
+       END OF GS_DATA2,
+       GT_DATA2 LIKE TABLE OF GS_DATA2.
+
+"MSSQL CONNECT
+"NATIVE SQL
+
+EXEC SQL.
+  CONNECT TO 'MSSQL1'
+ENDEXEC.
+IF SY-SUBRC <> 0.
+  MESSAGE 'CONNECT FAIL' TYPE 'S' DISPLAY LIKE 'E'.
+  EXIT.
+ENDIF.
+
+TRY .
+
+EXEC SQL.
+  DELETE FROM sapout.BOM WHERE REMARK_DC='{ KTJ }'
+ENDEXEC.
+"INSERT
+EXEC SQL.
+  INSERT INTO sapout.BOM
+              (ITEMPARENT_CD, ITEMCHILD_CD, BOM_SQ, JUST_QT, USE_YN, REMARK_DC)
+         VALUES (125, 13, 1, 1, 1, '{ FFFF }')
+ENDEXEC.
+
+CATCH CX_SY_NATIVE_SQL_ERROR INTO LX_EXEC. "덤프 안뜨게 하기 위함
+  LV_MSG = LX_EXEC->GET_TEXT(  ).
+  MESSAGE LV_MSG TYPE 'S' DISPLAY LIKE 'E'.
+ENDTRY.
+
+IF LV_MSG IS INITIAL.
+  EXEC SQL.
+    COMMIT
+  ENDEXEC.
+ELSE.
+  EXEC SQL.
+    ROLLBACK
+  ENDEXEC.
+ENDIF.
+
+"SELECT
+"PART 1
+EXEC SQL.
+  OPEN dbcur FOR
+    SELECT ONo, OPos, PlanedStart, PlanedEnd, Start, [End]
+      FROM sapin.OrderPos
+ENDEXEC.
+
+"PART 2
+DO. "LOOP처럼 나가기 전까지 수행됨
+  EXEC SQL.
+    FETCH NEXT dbcur INTO :GS_DATA2
+  ENDEXEC.
+  IF SY-SUBRC <> 0.
+    EXIT.
+  ENDIF.
+  APPEND GS_DATA2 TO GT_DATA2.
+ENDDO.
+
+"PART 3
+EXEC SQL.
+  CLOSE dbcur
+ENDEXEC.
+
+EXEC SQL.
+  DISCONNECT 'MSSQL1'
+ENDEXEC.
+IF SY-SUBRC <> 0.
+  MESSAGE 'CONNECT FAIL' TYPE 'S' DISPLAY LIKE 'E'.
+  EXIT.
+ENDIF.
